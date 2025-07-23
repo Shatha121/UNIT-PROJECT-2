@@ -1,0 +1,69 @@
+{% extends 'incidents/base.html' %}
+{% block title %}{{incident.title}} Detail{% endblock %}
+{% block content %}
+<div class="container my-5">
+    {% if incident.image %}
+        <img src="{{incident.image.url}}" class="img-fluid rounded mb-4 shadow">
+    {% endif %}
+    <div class="mb-4">
+      <h2 class="mb-3">{{ incident.title }}</h2>
+      <p><strong>Status:</strong> {{incident.status|capfirst}}</p>
+      <p><strong>Category:</strong> {{incident.category|capfirst}}</p>
+      <p><strong>Location:</strong> {{incident.location}}</p>
+      <p>{{ incident.description }}</p>
+      <div class="mt-3 d-flex gap-2">
+        <a href="{% url 'incidents:update_view' incident.id %}" class="btn btn-outline-primary">update</a>
+        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">delete</button>
+      </div>
+    </div>
+
+    <hr>
+    <div class="mt-5">
+      <h3>Comments <span class="text-muted">({{comments.count}})</span></h3>
+      <div class="d-flex flex-column gap-3 mt-3">
+        {% for comment in comments %}
+        <div class="p-3 bg-light border rounded shadow-sm">
+          <h5 class="mb-1">{{comment.author}}</h5>
+          <p class="mb-2">{{comment.content}}</p>
+          <small class="text-muted">{{comment.created_at}}</small>
+        </div>
+        {% empty %}
+          <p class="text-muted">No comments yet.</p>
+        {% endfor%}
+      </div>
+    </div>
+      <hr class="my-5">
+      <div>
+      <h3>Add Comment</h3>
+      <form class="mt-4" action="{% url 'incidents:comment_views' incident.id %}" method="POST">
+        {% csrf_token %}
+              <div class="mb-3">
+                  <label for="author" class="form-label">Author: </label>
+                  <input type="text" class="form-control" id="author" name="author" placeholder="Your name">
+              </div>
+              <div class="mb-4">
+                  <label for="content" class="form-label">Comment:</label>
+                  <textarea placeholder="Write your comment here" name="content" class="form-control" id="content" rows="4"  required></textarea>
+              </div>
+                <button type="submit" class="btn btn-primary px-4">Submit</button>
+      </form>
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Report</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are You sure you want to delete {{incident.title}} ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="{% url 'incidents:delete_view' incident.id %}" class="btn btn-danger">delete</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

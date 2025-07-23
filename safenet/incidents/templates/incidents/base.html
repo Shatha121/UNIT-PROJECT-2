@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light px-4 shadow-sm">
+        <a class="navbar-brand" href="{% url 'main:home_view' %}">SafeNet</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-4">
+                <li class="nav-items">
+                    <a class="nav-link" href="{% url 'incidents:all_reports_view' %}">All Reports</a>
+                </li>
+                <li class="nav-items">
+                    <a class="nav-link" href="{% url 'main:contact_us_view' %}">Contact Us</a>
+                </li>
+            </ul>
+            <div class="d-flex align-items-center gap-3">
+                <a class="btn btn-outline-primary" href="{% url 'incidents:report_incident_view' %}">Report Incident</a>
+                <span class="material-symbols-outlined mode-toggle">light_mode</span>
+                <span class="material-symbols-outlined mode-toggle">dark_mode</span>
+            </div>
+        </div>         
+    </nav>
+        <div class="container mt-5">
+            {% block content %}{% endblock %}
+        </div>
+</body>
+</html>

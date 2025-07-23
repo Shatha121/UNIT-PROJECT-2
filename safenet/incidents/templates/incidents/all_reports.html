@@ -1,0 +1,59 @@
+{% extends 'incidents/base.html' %}
+{% block title %}All reports{% endblock %}
+{% block content %}
+        <div class="container my-4">
+            <h1 class="mb-4">All Reports</h1>
+                <form action="{% url 'incidents:all_reports_view' %}" method="GET" class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <label for="search" class="form-label">Search</label>
+                        <input type="search" class="form-control" value="{{request.GET.search}}" name="search" placeholder="Title or Category" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Category</label>
+                        <select class="form-select" name="category">
+                                        <option value="">All Category</option>
+                                        <option value="public_safety" {% if request.GET.category == "public_safety" %}selected{% endif %}>Public Safety</option>
+                                        <option value="road_damage" {% if request.GET.category == "road_damage" %}selected{% endif %}>Road Damage</option>
+                                        <option value="vandalism" {% if request.GET.category == "vandalism" %}selected{% endif %}>Vandalism</option>
+                                        <option value="sanitation" {% if request.GET.category == "sanitation" %}selected{% endif %}>Sanitation</option>
+                                        <option value="lighting" {% if request.GET.category == "lighting" %}selected{% endif %}>Lighting</option>
+                                        <option value="other" {% if request.GET.category == "other" %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                            <label class="form-label">Status</label>
+                            <select name="status" class="form-select">
+                                <option value="">All Statuses</option>
+                                <option value="open" {% if request.GET.status == 'open'%} selected {% endif %}>Open</option>
+                                <option value="closed" {% if request.GET.status == 'closed'%} selected {% endif %}>Closed</option>
+                            </select>
+                    </div>
+                    <div class="col-md-2">
+                            <input type="submit" value="apply" class="btn btn-primary"/>
+                    </div>
+
+                </form>
+                <hr class="my-4">
+                {% if incidents %}
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-col-lg-4 g-4">
+                        {% for incident in incidents %}
+                            <div class="col">
+                                <div class="card h-100 shadow-sm">
+                                    {% if incident.image %}
+                                        <img src="{{incident.image.url}}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="incident image">
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{incident.title}}</h5> 
+                                        <p class="card-text">{{incident.category}}</p>
+                                        <a href="{% url 'incidents:incidents_details_view' incident.id %}" class="btn btn-outline-primary btn-sm">Brief about the report</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                </div>
+            {% else %}
+                <p class="bg-warning p-3 rounded mt-4">No results found for "{{request.GET.search}}"</p>
+            {% endif %}
+        </div>
+
+{% endblock %}

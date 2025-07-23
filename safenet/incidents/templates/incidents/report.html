@@ -1,0 +1,55 @@
+{% extends 'incidents/base.html' %}
+{% load static %}
+{% block title %}Add Report{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-center min-vh-100 ng-body-tertiary">
+    <div class="container py-4">
+        <h1 class="mb-4 text-primary text-center">Add Report</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+
+                <form class="p-4 shadow rounded bg-light" action="{% url 'incidents:report_incident_view' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Reporter Name:</label>
+                        <input type="text" class="form-control" id="reporter_name" name="reporter_name" placeholder="Username">
+                    </div>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title:</label>
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Title of the report">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description:</label>
+                        <br>
+                        <textarea placeholder="Description about the report" name="description" class="form-control" id="about" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label d-block">Category: </label>
+                        {% for val, label in CATEGORY_CHOICES %}
+                        <div class="form-check form-check-inline">
+                                <input type="radio" id="{{val}}" name="category" value="{{val}}" class="form-check-input" required/>
+                                <label class="form-check-label" for="{{val}}">{{label}}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="location" class="form-label">location:</label>
+                        <input type="text" class="form-control" id="location" name="location" placeholder="location of the incident">
+                    </div>
+                    <div class="mb-4">
+                        <label for="image" class="form-label">Upload Image:</label>
+                        <input type="file" name="image" class="form-control" id="image" required accept="image/*"/>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Add Report</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
