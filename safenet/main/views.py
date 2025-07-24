@@ -31,3 +31,16 @@ def contact_us_view(request:HttpRequest):
         else:
             print('not valid form')
     return render(request, 'main/contact_us.html',{"contect_form":contect_form, "sumbitted":sumbitted})
+
+
+def dark_mode_view(request:HttpRequest):
+    referer = request.META.get('HTTP_REFERER', '/')
+    response = redirect(referer)
+    response.set_cookie("mode", "dark", max_age=60*60*24*7)
+    return response
+
+def light_mode_view(request:HttpRequest):
+    referer = request.META.get('HTTP_REFERER', '/')
+    response = redirect(referer)
+    response.delete_cookie("mode")
+    return response

@@ -1,27 +1,35 @@
 {% extends 'incidents/base.html' %}
+{% load static %}
 {% block title %}Home{% endblock %}
 {% block content %}
     <div class="container my-5">
-        <div class="text-center mb-5">
-            <h1 class="display-4 fw-bold">Welcome to SafeNet</h1>
-            <p class="lead text-muted">We empower citizens to report issues and help build safer communities</p>
-            <a href="{% url 'incidents:report_incident_view' %}" class="btn btn-primary btn-lg mt-3">Report an Incident</a>
+        <div class="position-relative" style="height: 80vh; overflow: hidden;">
+            <div class="hero-bg">
+                <video class="hero-bg position-absolute top-0 start-0 w-100 h-100 object-fit-cover" autoplay muted loop playsinline>
+                    <source src="{% static 'vidoes/hero.mp4' %}" type="video/mp4">
+                </video>
+            </div>
+            <div class="container hero-section hero-overlay d-flex flex-column justify-content-center align-items-center h-100">
+                <h1 class="hero-title">Welcome to SafeNet</h1>
+                <p class="hero-subtitle">We empower citizens to report issues and help build safer communities</p>
+                <a href="{% url 'incidents:report_incident_view' %}" class="btn btn-primary btn-lg hero-button">Report an Incident</a>
+            </div>
         </div>
-        <div class="row text-center mb-5">
+        <div class="row text-center mb-5 mt-3">
             <div class="col-md-4 mb-3">
-                <div class="bg-light rounded p-4 shadow-sm h-100">
+                <div class="card rounded p-4 shadow-sm h-100">
                     <h5>Total Reports</h5>
                     <p class="fs-4">{{total_incidents}}</p>
                 </div>
             </div>
             <div class="col-md-4 mb-3">
-                <div class="bg-light rounded p-4 shadow-sm h-100">
+                <div class="card rounded p-4 shadow-sm h-100">
                     <h5>Open</h5>
                     <p class="fs-4 text-warning">{{open_incidents}}</p>
                 </div>
             </div>
             <div class="col-md-4 mb-3">
-                <div class="bg-light rounded p-4 shadow-sm h-100">
+                <div class="card rounded p-4 shadow-sm h-100">
                     <h5>Closed</h5>
                     <p class="fs-4 text-success">{{closed_incidents}}</p>
                 </div>
@@ -29,7 +37,7 @@
         </div>
 
         <div class="mb-5">
-            <h5>Top Categories:</h5>
+            <h5>The Most Reported Categories:</h5>
             <p class="text-muted">
                 {% for category in top_categories %}
                     <span class="badge bg-secondary me-1">{{ category.category|capfirst }}</span>
@@ -48,7 +56,7 @@
                                 {% endif %}
                                 <div class="card-body">
                                     <h5 class="card-title">{{incident.title}}</h5>
-                                    <p class="card-text text-muted">{{incident.category|capfirst}}</p>
+                                    <p class="card-text">{{incident.category|capfirst}}</p>
                                     <a href="{% url 'incidents:incidents_details_view' incident.id %}" class="btn btn-outline-primary btn-sm">Brief about the report</a>
                                 </div>
                             </div>

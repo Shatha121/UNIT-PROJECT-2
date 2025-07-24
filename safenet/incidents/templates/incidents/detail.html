@@ -1,53 +1,84 @@
 {% extends 'incidents/base.html' %}
+{% load static %}
 {% block title %}{{incident.title}} Detail{% endblock %}
 {% block content %}
 <div class="container my-5">
-    {% if incident.image %}
-        <img src="{{incident.image.url}}" class="img-fluid rounded mb-4 shadow">
-    {% endif %}
-    <div class="mb-4">
-      <h2 class="mb-3">{{ incident.title }}</h2>
-      <p><strong>Status:</strong> {{incident.status|capfirst}}</p>
-      <p><strong>Category:</strong> {{incident.category|capfirst}}</p>
-      <p><strong>Location:</strong> {{incident.location}}</p>
-      <p>{{ incident.description }}</p>
-      <div class="mt-3 d-flex gap-2">
-        <a href="{% url 'incidents:update_view' incident.id %}" class="btn btn-outline-primary">update</a>
-        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">delete</button>
-      </div>
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-7">  
+        <h2 class="mb-3">{{ incident.title }}</h2>
+        <p><strong>Status:</strong> {{incident.status|capfirst}}</p>
+        <p><strong>Category:</strong> {{incident.category|capfirst}}</p>
+        <p><strong>Location:</strong> {{incident.location}}</p>
+        <p><strong>Reported by: {{incident.reporter_name}}</strong></p>
+        <p><strong>🏅Rank: 
+                                            {% with incident.reporter_rank as rank %}
+                                                {% if rank == "Gold" %}
+                                                    <span class="badge bg-warning text-dark" style="background-color: rgb(254, 204, 66);" title="10+ reports">
+                                                        <img src="{% static 'images/gold-medal.png' %}" width="20" class="me-1"><strong>Gold</strong>
+                                                    </span>
+                                                {% elif rank == "Silver" %}
+                                                    <span class="badge bg-secondary" style="background-color: rgb(129, 129, 128);" title="5+ reports">
+                                                        <img src="{% static 'images/silver-medal.png' %}" width="20" class="me-1"><strong>Silver</strong>
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge bg-bronze text-light" style="background-color: rgb(187, 133, 34);" title="less than 5 reports">
+                                                        <img src="{% static 'images/bronze-medal.png' %}" width="20" class="me-1"><strong>Bronze</strong>
+                                                    </span>
+                                                {% endif %}
+                                            {% endwith %}
+                                            </strong></p>
+        <p>{{ incident.description }}</p>
+        <div class="mt-4 d-flex gap-2">
+          <a href="{% url 'incidents:update_view' incident.id %}" class="btn btn-outline-primary">update</a>
+          <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">delete</button>
+        </div>
     </div>
+    <div class="col-lg-5">
+      {% if incident.image %}
+        <img src="{{incident.image.url}}" style="height: 320px; width: 100%; object-fit: cover;" class="img-fluid rounded shadow-sm" alt="image of the incident">
+      {% endif %}
+    </div>
+  </div>
+      
 
-    <hr>
+    <hr class="my-5">
     <div class="mt-5">
-      <h3>Comments <span class="text-muted">({{comments.count}})</span></h3>
+      <h3>Comments <span>({{comments.count}})</span></h3>
       <div class="d-flex flex-column gap-3 mt-3">
         {% for comment in comments %}
-        <div class="p-3 bg-light border rounded shadow-sm">
+        <div class="form-wrapper p-3 rounded shadow-sm">
           <h5 class="mb-1">{{comment.author}}</h5>
           <p class="mb-2">{{comment.content}}</p>
-          <small class="text-muted">{{comment.created_at}}</small>
+          <small>{{comment.created_at}}</small>
         </div>
         {% empty %}
-          <p class="text-muted">No comments yet.</p>
+          <p>No comments yet.</p>
         {% endfor%}
       </div>
     </div>
-      <hr class="my-5">
-      <div>
-      <h3>Add Comment</h3>
-      <form class="mt-4" action="{% url 'incidents:comment_views' incident.id %}" method="POST">
-        {% csrf_token %}
-              <div class="mb-3">
-                  <label for="author" class="form-label">Author: </label>
-                  <input type="text" class="form-control" id="author" name="author" placeholder="Your name">
-              </div>
-              <div class="mb-4">
-                  <label for="content" class="form-label">Comment:</label>
-                  <textarea placeholder="Write your comment here" name="content" class="form-control" id="content" rows="4"  required></textarea>
-              </div>
-                <button type="submit" class="btn btn-primary px-4">Submit</button>
-      </form>
 
+      <hr class="my-5">
+
+      <div class="mb-5">
+      <h3>Add Comment</h3>
+      <div class="form-wrapper p-4 rounded shadow-sm mt-4">
+        <form action="{% url 'incidents:comment_views' incident.id %}" method="POST">
+          {% csrf_token %}
+                <div class="mb-3">
+                    <label for="author" class="form-label">Author: </label>
+                    <input type="text" class="form-control" id="author" name="author" placeholder="Your name">
+                </div>
+                <div class="mb-4">
+                    <label for="content" class="form-label">Comment:</label>
+                    <textarea placeholder="Write your comment here" name="content" class="form-control" id="content" rows="4"  required></textarea>
+                </div>
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary px-4">Submit</button>
+                </div>
+        </form>
+      </div>
+    </div>
+</div>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">

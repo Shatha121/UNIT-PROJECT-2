@@ -22,10 +22,20 @@ class Incident(models.Model):
     description = models.TextField()
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='other')
     location = models.CharField(max_length=200)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
     image = models.ImageField(upload_to='incidents/', blank=True, null=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='open')
-    reporter_name = models.CharField(max_length=100, default="Anonymous")
+    reporter_name = models.CharField(max_length=100, default="Anonymous", blank=True)
     date_reported = models.DateTimeField(auto_now_add=True)
+
+    def reporter_rank(self):
+        count = Incident.objects.filter(reporter_name = self.reporter_name).count()
+        if count >= 10:
+            return 'Gold'
+        elif count >= 5:
+            return "Silver"
+        return 'Bronze'
 
     def __str__(self):
         return self.title

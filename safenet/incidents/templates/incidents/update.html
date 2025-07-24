@@ -4,55 +4,88 @@
 
 {% block content %}
 <div class="container py-4">
-    <h1 class="mb-4 text-primary text-center">Update Report: {{incident.title}}</h1>
+    <h1 class="mb-4 contact-title text-center">Update Report: {{incident.title}}</h1>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <form class="form" action="{% url 'incidents:update_view' incident.id %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="mb-3">
-                    <label for="title" class="form-label">Reporter Name:</label>
-                    <input type="text" class="form-control" id="reporter_name" name="reporter_name" placeholder="Username" value="{{incident.title}}">
-                </div>
-                <div class="mb-3">
-                    <label for="title" class="form-label">Title:</label>
-                    <input type="text" class="form-control" id="title" name="title" placeholder="Title of the report" value="{{incident.title}}">
-                </div>
-                <div class="mb-3">
-                    <label for="description" class="form-label">Description:</label>
-                    <textarea placeholder="Description about the report" name="description" class="form-control" id="description" rows="4" required>{{incident.description}}</textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="category" class="form-label">Category: </label>
-                        <select class="form-select" id="category" name="category">
-                            <option value="public_safety" {% if incident.category == "public_safety" %}selected{% endif %}>Public Safety</option>
-                            <option value="road_damage" {% if incident.category == "road_damage" %}selected{% endif %}>Road Damage</option>
-                            <option value="vandalism" {% if incident.category == "vandalism" %}selected{% endif %}>Vandalism</option>
-                            <option value="sanitation" {% if incident.category == "sanitation" %}selected{% endif %}>Sanitation</option>
-                            <option value="lighting" {% if incident.category == "lighting" %}selected{% endif %}>Lighting</option>
-                            <option value="other" {% if incident.category == "other" %}selected{% endif %}>Other</option>
-                        </select>
-                </div>
-                <div class="mb-3">
-                    <label for="location" class="form-label">location:</label>
-                    <input type="text" class="form-control" id="location" name="location" placeholder="location of the incident" value="{{incident.location}}">
-                </div>
-                <div class="mb-3">
-                    {% if incident.image %}
-                        <p>Current Image:</p>
-                        <img src="{{incident.image.url}}" class="img-fluid mb-2 rounded border" style="max-height: 250px;"/>
-                    {% endif %}
-                    <br>
-                    <label for="image" class="form-label">Change Image:</label>
-                    <input type="file" name="image" class="form-control" id="image" accept="image/*"/>
-                </div>
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Update Report</button>
-                </div>
-            </form>
+            <div class="form-wrapper p-4 rounded shadow">
+                <form class="form" action="{% url 'incidents:update_view' incident.id %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Reporter Name:</label>
+                        <input type="text" class="form-control" id="reporter_name" name="reporter_name" placeholder="Username" value="{{incident.title}}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title:</label>
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Title of the report" value="{{incident.title}}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description:</label>
+                        <textarea placeholder="Description about the report" name="description" class="form-control" id="description" rows="4" required>{{incident.description}}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category: </label>
+                            <select class="form-select" id="category" name="category">
+                                <option value="public_safety" {% if incident.category == "public_safety" %}selected{% endif %}>Public Safety</option>
+                                <option value="road_damage" {% if incident.category == "road_damage" %}selected{% endif %}>Road Damage</option>
+                                <option value="vandalism" {% if incident.category == "vandalism" %}selected{% endif %}>Vandalism</option>
+                                <option value="sanitation" {% if incident.category == "sanitation" %}selected{% endif %}>Sanitation</option>
+                                <option value="lighting" {% if incident.category == "lighting" %}selected{% endif %}>Lighting</option>
+                                <option value="other" {% if incident.category == "other" %}selected{% endif %}>Other</option>
+                            </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="location" class="form-label">location:</label>
+                        <input type="text" class="form-control" id="location" name="location" placeholder="location of the incident" value="{{incident.location}}">
+                    </div>
+                    <div class="mb-3">
+                        {% if incident.image %}
+                            <p>Current Image:</p>
+                            <img src="{{incident.image.url}}" class="img-fluid mb-2 rounded border" style="max-height: 250px;"/>
+                        {% endif %}
+                        <br>
+                        <label for="image" class="form-label">Change Image:</label>
+                        <input type="file" name="image" class="form-control" id="image" accept="image/*"/>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Update Report</button>
+                    </div>
+                </form>
+            </div>
 
         </div>
     </div>
 
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        if ("geolocation" in navigator) {
+            if (confirm("Do you want to use your current location for report?")){
+                navigator.geolocation.getCurrentPosition(function (position){
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.display_name){
+                            document.getElementById("location").value = data.display_name;
+                        } else {
+                            document.getElementById("location").value = `${latitude}, ${longitude}`;
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Reverse geocoding error:", err);
+                        document.getElementById("location").value = `${latitude}, ${longitude}`
+                    });
+                }, function(error){
+                    alert("Unable to retrieve your location.");
+                    console.error(error);
+                });
+            }
+        } else {
+            alert("Geolocation is not supported by your browser.");
+        }
+    });
+    </script>
 
 {% endblock %}

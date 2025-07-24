@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>{% block title %}{% endblock %}</title>
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light px-4 shadow-sm">
+<body class="{% if request.COOKIES.mode == 'dark' %} dark-mode {% else %} light-mode {% endif %}">
+    <nav class="navbar navbar-expand-lg px-4 shadow-sm">
         <a class="navbar-brand" href="{% url 'main:home_view' %}">SafeNet</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -28,8 +28,8 @@
             </ul>
             <div class="d-flex align-items-center gap-3">
                 <a class="btn btn-outline-primary" href="{% url 'incidents:report_incident_view' %}">Report Incident</a>
-                <span class="material-symbols-outlined mode-toggle">light_mode</span>
-                <span class="material-symbols-outlined mode-toggle">dark_mode</span>
+                <a href="{% url 'main:light_mode_view' %}"><span class="material-symbols-outlined mode-toggle {% if request.COOKIES.mode != 'dark' %}active{% endif %}">light_mode</span></a>
+                <a href="{% url 'main:dark_mode_view' %}"><span class="material-symbols-outlined mode-toggle {% if request.COOKIES.mode == 'dark' %}active{% endif %}">dark_mode</span></a>
             </div>
         </div>         
     </nav>

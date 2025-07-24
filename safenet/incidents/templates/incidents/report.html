@@ -5,11 +5,11 @@
 {% block content %}
 <div class="d-flex align-items-center justify-content-center min-vh-100 ng-body-tertiary">
     <div class="container py-4">
-        <h1 class="mb-4 text-primary text-center">Add Report</h1>
+        <h1 class="mb-4 contact-title text-center">Add Report</h1>
         <div class="row justify-content-center">
             <div class="col-md-8">
 
-                <form class="p-4 shadow rounded bg-light" action="{% url 'incidents:report_incident_view' %}" method="post" enctype="multipart/form-data">
+                <form class="p-4 shadow rounded form-wrapper" action="{% url 'incidents:report_incident_view' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="location" class="form-label">Reporter Name:</label>
@@ -17,7 +17,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="title" class="form-label">Title:</label>
-                        <input type="text" class="form-control" id="title" name="title" placeholder="Title of the report">
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Title of the report" required>
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description:</label>
@@ -35,7 +35,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="location" class="form-label">location:</label>
-                        <input type="text" class="form-control" id="location" name="location" placeholder="location of the incident">
+                        <input type="text" class="form-control" id="location" name="location" placeholder="location of the incident" required>
                     </div>
                     <div class="mb-4">
                         <label for="image" class="form-label">Upload Image:</label>
@@ -52,4 +52,34 @@
 
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        if ("geolocation" in navigator) {
+            if (confirm("Do you want to use your current location for report?")){
+                navigator.geolocation.getCurrentPosition(function (position){
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.display_name){
+                            document.getElementById("location").value = data.display_name;
+                        } else {
+                            document.getElementById("location").value = `${latitude}, ${longitude}`;
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Reverse geocoding error:", err);
+                        document.getElementById("location").value = `${latitude}, ${longitude}`
+                    });
+                }, function(error){
+                    alert("Unable to retrieve your location.");
+                    console.error(error);
+                });
+            }
+        } else {
+            alert("Geolocation is not supported by your browser.");
+        }
+    });
+    </script>
 {% endblock %}

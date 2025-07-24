@@ -19,7 +19,8 @@ def report_incident_view(request:HttpRequest):
         form = IncidentForm(request.POST, request.FILES)
         if form.is_valid():
             incident = form.save(commit=False)
-            incident.reporter_name = request.POST.get("reporter_name")
+            reporter_name = request.POST.get("reporter_name")
+            incident.reporter_name = reporter_name if reporter_name.strip() else "Anonymous"
             incident.save()
             return redirect('main:home_view')
     
@@ -40,6 +41,8 @@ def all_reports_view(request:HttpRequest):
             incidents = incidents.filter(category=category_filter)
     if status_filter:
             incidents = incidents.filter(status=status_filter)
+
+    
     return render(request, 'incidents/all_reports.html', {"incidents":incidents} )
 
 
