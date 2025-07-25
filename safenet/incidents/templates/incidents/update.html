@@ -25,12 +25,9 @@
                     <div class="mb-3">
                         <label for="category" class="form-label">Category: </label>
                             <select class="form-select" id="category" name="category">
-                                <option value="public_safety" {% if incident.category == "public_safety" %}selected{% endif %}>Public Safety</option>
-                                <option value="road_damage" {% if incident.category == "road_damage" %}selected{% endif %}>Road Damage</option>
-                                <option value="vandalism" {% if incident.category == "vandalism" %}selected{% endif %}>Vandalism</option>
-                                <option value="sanitation" {% if incident.category == "sanitation" %}selected{% endif %}>Sanitation</option>
-                                <option value="lighting" {% if incident.category == "lighting" %}selected{% endif %}>Lighting</option>
-                                <option value="other" {% if incident.category == "other" %}selected{% endif %}>Other</option>
+                                {% for value, label in category_choices %}
+                                    <option value="{{value}}" {% if request.GET.category == "value" %}selected{% endif %}>{{label}}</option>
+                                {% endfor %}
                             </select>
                     </div>
                     <div class="mb-3">

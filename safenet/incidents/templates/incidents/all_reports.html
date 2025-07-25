@@ -10,26 +10,33 @@
                             <label for="search" class="form-label fw-bold">Search</label>
                             <input type="search" class="form-control" value="{{request.GET.search}}" name="search" placeholder="Title or Category" />
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label fw-bold">Category</label>
                             <select class="form-select" name="category">
                                             <option value="">All Category</option>
-                                            <option value="public_safety" {% if request.GET.category == "public_safety" %}selected{% endif %}>Public Safety</option>
-                                            <option value="road_damage" {% if request.GET.category == "road_damage" %}selected{% endif %}>Road Damage</option>
-                                            <option value="vandalism" {% if request.GET.category == "vandalism" %}selected{% endif %}>Vandalism</option>
-                                            <option value="sanitation" {% if request.GET.category == "sanitation" %}selected{% endif %}>Sanitation</option>
-                                            <option value="lighting" {% if request.GET.category == "lighting" %}selected{% endif %}>Lighting</option>
-                                            <option value="other" {% if request.GET.category == "other" %}selected{% endif %}>Other</option>
+                                            {% for value, label in category_choices%}
+                                                <option value="{{value}}" {% if request.GET.category == value %}selected{% endif %}>{{label}}</option>
+                                            {% endfor %}
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                                 <label class="form-label fw-bold">Status</label>
                                 <select name="status" class="form-select">
                                     <option value="">All Statuses</option>
-                                    <option value="open" {% if request.GET.status == 'open'%} selected {% endif %}>Open</option>
-                                    <option value="closed" {% if request.GET.status == 'closed'%} selected {% endif %}>Closed</option>
+                                    {% for value, label in status_choices%}
+                                        <option value="{{value}}" {% if request.GET.status == value %} selected {% endif %}>{{label}}</option>
+                                    {% endfor %}
                                 </select>
                         </div>
+                         <div class="col-md-2">
+                            <label class="form-label fw-bold">Rank</label>
+                            <select name="reporter_rank" class="form-select">
+                                <option value="">All Ranks</option>
+                                {% for rank in ranks %}
+                                    <option value="{{rank}}" {% if request.GET.reporter_rank == rank %} selected {% endif %}>{{rank}}</option>
+                                {% endfor %}
+                            </select>
+                         </div>
                         <div class="col-md-2 d-grid">
                                 <input type="submit" value="apply" class="btn btn-primary"/>
                         </div>
@@ -48,20 +55,23 @@
                                     <div class="card-body">
                                         <h5 class="card-title text-primary">{{incident.title}}</h5> 
                                         <p class="card-text mb-1">Reported by: <strong>👤{{incident.reporter_name}}</strong></p>
-                                        <p class="card-text mb-1">🏅Rank: 
+                                        
                                             {% with incident.reporter_rank as rank %}
-                                                {% if rank == "Gold" %}
-                                                    <span class="badge bg-warning text-dark" title="10+ reports">
-                                                        <img src="{% static 'images/gold-medal.png' %}" width="20" class="me-1"><strong>Gold</strong>
-                                                    </span>
-                                                {% elif rank == "Silver" %}
-                                                    <span class="badge bg-secondary" title="5+ reports">
-                                                        <img src="{% static 'images/silver-medal.png' %}" width="20" class="me-1"><strong>Silver</strong>
-                                                    </span>
-                                                {% else %}
-                                                    <span class="badge bg-bronze text-light" style="background-color: rgb(187, 133, 34);" title="less than 5 reports">
-                                                        <img src="{% static 'images/bronze-medal.png' %}" width="20" class="me-1"><strong>Bronze</strong>
-                                                    </span>
+                                                {% if rank %}
+                                                    <p class="card-text mb-1">🏅Rank: 
+                                                    {% if rank == "Gold" %}
+                                                        <span class="badge bg-warning text-dark" title="10+ reports">
+                                                            <img src="{% static 'images/gold-medal.png' %}" width="20" class="me-1"><strong>Gold</strong>
+                                                        </span>
+                                                    {% elif rank == "Silver" %}
+                                                        <span class="badge bg-secondary" title="5+ reports">
+                                                            <img src="{% static 'images/silver-medal.png' %}" width="20" class="me-1"><strong>Silver</strong>
+                                                        </span>
+                                                    {% else %}
+                                                        <span class="badge bg-bronze text-light" style="background-color: rgb(187, 133, 34);" title="1-4 reports">
+                                                            <img src="{% static 'images/bronze-medal.png' %}" width="20" class="me-1"><strong>Bronze</strong>
+                                                        </span>
+                                                    {% endif %}
                                                 {% endif %}
                                             {% endwith %}
                                         </p>

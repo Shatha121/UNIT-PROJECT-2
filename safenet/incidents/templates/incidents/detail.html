@@ -10,21 +10,24 @@
         <p><strong>Category:</strong> {{incident.category|capfirst}}</p>
         <p><strong>Location:</strong> {{incident.location}}</p>
         <p><strong>Reported by: {{incident.reporter_name}}</strong></p>
-        <p><strong>🏅Rank: 
+         
                                             {% with incident.reporter_rank as rank %}
+                                              {% if rank %}
+                                                <p><strong>🏅Rank:
                                                 {% if rank == "Gold" %}
-                                                    <span class="badge bg-warning text-dark" style="background-color: rgb(254, 204, 66);" title="10+ reports">
+                                                    <span class="badge bg-warning text-dark" style="background-color: rgb(254, 204, 66);" title="10+ closed reports">
                                                         <img src="{% static 'images/gold-medal.png' %}" width="20" class="me-1"><strong>Gold</strong>
                                                     </span>
                                                 {% elif rank == "Silver" %}
-                                                    <span class="badge bg-secondary" style="background-color: rgb(129, 129, 128);" title="5+ reports">
+                                                    <span class="badge bg-secondary" style="background-color: rgb(129, 129, 128);" title="5+ closed reports">
                                                         <img src="{% static 'images/silver-medal.png' %}" width="20" class="me-1"><strong>Silver</strong>
                                                     </span>
                                                 {% else %}
-                                                    <span class="badge bg-bronze text-light" style="background-color: rgb(187, 133, 34);" title="less than 5 reports">
+                                                    <span class="badge bg-bronze text-light" style="background-color: rgb(187, 133, 34);" title="1-4 closed reports">
                                                         <img src="{% static 'images/bronze-medal.png' %}" width="20" class="me-1"><strong>Bronze</strong>
                                                     </span>
                                                 {% endif %}
+                                              {% endif %}
                                             {% endwith %}
                                             </strong></p>
         <p>{{ incident.description }}</p>

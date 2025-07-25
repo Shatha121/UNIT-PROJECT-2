@@ -12,10 +12,14 @@ def home_view(request:HttpRequest):
     total_incidents = Incident.objects.count()
     open_incidents = Incident.objects.filter(status="open").count()
     closed_incidents = Incident.objects.filter(status="closed").count()
+    Category_Dict = dict(Incident.CATEGORY_CHOICES)
 
-    top_categories = (
-        Incident.objects.values('category').annotate(count=Count('category')).order_by('-count')[:3]
+
+    top_value_category = (
+        Incident.objects.values('category').annotate(count=Count('category')).order_by('-count').values_list('category', flat=True)[:3]
     )
+    top_categories = [Category_Dict[value] for value in top_value_category]
+
     recent_incidents = Incident.objects.all().order_by('-date_reported')[:4]
     return render(request, 'main/home.html', {'total_incidents':total_incidents,'open_incidents':open_incidents,'closed_incidents':closed_incidents,'top_categories':top_categories,'recent_incidents':recent_incidents})
 

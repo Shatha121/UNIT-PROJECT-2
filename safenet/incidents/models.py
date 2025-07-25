@@ -30,6 +30,8 @@ class Incident(models.Model):
     date_reported = models.DateTimeField(auto_now_add=True)
 
     def reporter_rank(self):
+        if self.reporter_name.lower().strip() == "anonymous":
+            return None
         count = Incident.objects.filter(reporter_name = self.reporter_name).count()
         if count >= 10:
             return 'Gold'

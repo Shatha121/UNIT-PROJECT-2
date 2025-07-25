@@ -32,18 +32,24 @@ def report_incident_view(request:HttpRequest):
 
 def all_reports_view(request:HttpRequest):
     incidents = Incident.objects.all().order_by("-date_reported")
-    search_result = request.GET.get("search","")
-    category_filter = request.GET.get("category","")
-    status_filter = request.GET.get("status","")
-    if len(search_result) >= 3:
+    search_result = request.GET.get("search")
+    category_filter = request.GET.get("category")
+    status_filter = request.GET.get("status")
+    rank_filter = request.GET.get("reporter_rank")
+    
+    if search_result and len(search_result) >= 3:
         incidents = incidents.filter(Q(title__icontains=search_result) | Q(category__icontains=search_result))
     if category_filter:
             incidents = incidents.filter(category=category_filter)
     if status_filter:
             incidents = incidents.filter(status=status_filter)
+    if rank_filter:
+            incidents = [i for i in incidents if i.reporter_name.lower().strip() !="anonymous" and i.reporter_rank == rank_filter]
 
-    
-    return render(request, 'incidents/all_reports.html', {"incidents":incidents} )
+    ranks = ["Gold", "Silver", "Bronze"]
+    category_choices = Incident._meta.get_field('category').choices
+    status_choices = Incident._meta.get_field('status').choices
+    return render(request, 'incidents/all_reports.html', {"incidents":incidents, "ranks":ranks, "category_choices":category_choices, "status_choices":status_choices} )
 
 
 def update_view(request:HttpRequest, incidents_id):
@@ -58,7 +64,8 @@ def update_view(request:HttpRequest, incidents_id):
         incident.save()
 
         return redirect("incidents:incidents_details_view", incidents_id=incident.id)
-    return render(request, "incidents/update.html", {"incident":incident})
+    category_choices = Incident._meta.get_field('category').choices
+    return render(request, "incidents/update.html", {"incident":incident, "category_choices":category_choices})
 
 
 def delete_view(request:HttpRequest, incidents_id):

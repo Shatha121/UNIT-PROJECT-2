@@ -34,7 +34,14 @@ body.light-mode .mode-toggle:hover{
     font-size: 1.5rem;
     transition: color 0.3s ease;
     text-decoration: none;
+    transition: transform 0.3s ease, color 0.3s ease;
 }
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
 
 .nav-link {
     font-weight: 500;
@@ -82,6 +89,8 @@ body{
 body.light-mode {
     color: #212529;
     background-color: white;
+    --more-link-color: rgb(56,56,56);
+    --more-link-hover-color: black;
 }
 
 body.light-mode .navbar{
@@ -106,6 +115,8 @@ body.light-mode .nav-link:hover{
 body.dark-mode {
     color:#f1f1f1;
     background-color: rgb(62, 62, 62);
+    --more-link-color: white;
+    --more-link-hover-color:rgb(154, 154, 154);
 }
 
 body.dark-mode .card{
@@ -248,11 +259,11 @@ body.dark-mode .badge.bg-secondary {
 
 body.light-mode .badge.bg-secondary {
     background-color: #dee2e6;
-    color: #212529;
+    color: #101214;
 }
 
 body.light-mode .hero-section {
-    color: #212529;
+    color: #1b1d1f;
 }
 
 body.dark-mode .hero-section {
@@ -395,3 +406,63 @@ body.dark-mode .modal-header, body.dark-mode .modal-footer{
     border-color: #444;
 }
 
+.site-footer {
+    font-size: 0.9rem;
+    background-color: transparent;
+}
+
+.site-footer a{
+    text-decoration: none;
+    margin: 0 0.5rem;
+    transition: color 0.2s ease;
+}
+
+body.light-mode .site-footer{
+    color: #6c757d;
+}
+
+body.dark-mode .site-footer{
+    color: #cccccc;
+}
+
+body.light-mode .site-footer a{
+    color: #0d6efd;
+}
+
+body.dark-mode .site-footer a{
+    color: #79afff;
+}
+
+.site-footer a:hover{
+    text-decoration: underline;
+}
+
+body.light-mode a.more-link{
+    color: rgb(56, 56, 56) !important;
+    text-decoration: none !important;
+}
+
+body.light-mode a.more-link:hover{
+    color: black !important;
+    text-decoration: underline !important;
+}
+
+body.dark-mode a.more-link{
+    color: rgb(202, 202, 202) !important;
+    text-decoration: none !important;
+}
+
+body.dark-mode a.more-link:hover{
+    color: white !important;
+    text-decoration: underline !important;
+}
+
+a.more-link {
+    color: var(--more-link-color);
+    text-decoration: none !important;
+}
+
+a.more-link:hover{
+    color: var(--more-link-color);
+    text-decoration: underline;
+}
