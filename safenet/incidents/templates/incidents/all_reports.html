@@ -35,6 +35,7 @@
                                 {% for rank in ranks %}
                                     <option value="{{rank}}" {% if request.GET.reporter_rank == rank %} selected {% endif %}>{{rank}}</option>
                                 {% endfor %}
+                                    <option value="None" {% if request.GET.reporter_rank == "None" %} selected {% endif %}>No Rank</option>
                             </select>
                          </div>
                         <div class="col-md-2 d-grid">

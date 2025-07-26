@@ -32,12 +32,14 @@ class Incident(models.Model):
     def reporter_rank(self):
         if self.reporter_name.lower().strip() == "anonymous":
             return None
-        count = Incident.objects.filter(reporter_name = self.reporter_name).count()
+        count = Incident.objects.filter(reporter_name = self.reporter_name, status = "closed").count()
         if count >= 10:
             return 'Gold'
         elif count >= 5:
             return "Silver"
-        return 'Bronze'
+        elif count >= 1:
+            return 'Bronze'
+        return None
 
     def __str__(self):
         return self.title

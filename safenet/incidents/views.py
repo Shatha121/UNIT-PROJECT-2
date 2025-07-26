@@ -44,7 +44,10 @@ def all_reports_view(request:HttpRequest):
     if status_filter:
             incidents = incidents.filter(status=status_filter)
     if rank_filter:
-            incidents = [i for i in incidents if i.reporter_name.lower().strip() !="anonymous" and i.reporter_rank == rank_filter]
+        if rank_filter == "None":
+            incidents = [i for i in incidents if i.reporter_name.lower().strip() =="anonymous" or i.reporter_rank() is None] 
+        else: 
+            incidents =[ i for i in incidents if i.reporter_name.lower().strip() !="anonymous" and i.reporter_rank() == rank_filter]
 
     ranks = ["Gold", "Silver", "Bronze"]
     category_choices = Incident._meta.get_field('category').choices
