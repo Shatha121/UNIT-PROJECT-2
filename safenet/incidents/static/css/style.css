@@ -466,3 +466,11 @@ a.more-link:hover{
     color: var(--more-link-color);
     text-decoration: underline;
 }
+
+body.light-mode .navbar .toggle-icon {
+    color: black !important;
+}
+
+body.dark-mode .navbar .toggle-icon {
+    color: white !important;
+}

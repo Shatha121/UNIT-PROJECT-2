@@ -58,7 +58,8 @@ def all_reports_view(request:HttpRequest):
 def update_view(request:HttpRequest, incidents_id):
     incident = Incident.objects.get(pk=incidents_id)
     if request.method == "POST":
-        incident.reporter_name = request.POST["reporter_name"]
+        reporter_name = request.POST.get("reporter_name","").strip()
+        incident.reporter_name = reporter_name if reporter_name else "Anonymous"
         incident.title = request.POST["title"]
         incident.description = request.POST["description"]
         incident.category = request.POST["category"]

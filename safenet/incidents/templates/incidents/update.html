@@ -11,12 +11,12 @@
                 <form class="form" action="{% url 'incidents:update_view' incident.id %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="title" class="form-label">Reporter Name:</label>
-                        <input type="text" class="form-control" id="reporter_name" name="reporter_name" placeholder="Username" value="{{incident.title}}">
+                        <label for="reporter_name" class="form-label">Reporter Name:</label>
+                        <input type="text" class="form-control" id="reporter_name" name="reporter_name" placeholder="Username" value="{{incident.reporter_name}}">
                     </div>
                     <div class="mb-3">
                         <label for="title" class="form-label">Title:</label>
-                        <input type="text" class="form-control" id="title" name="title" placeholder="Title of the report" value="{{incident.title}}">
+                        <input type="text" class="form-control" id="title" name="title" required placeholder="Title of the report" value="{{incident.title}}">
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description:</label>
@@ -24,7 +24,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="category" class="form-label">Category: </label>
-                            <select class="form-select" id="category" name="category">
+                            <select class="form-select" id="category" name="category" required>
                                 {% for value, label in category_choices %}
                                     <option value="{{value}}" {% if request.GET.category == "value" %}selected{% endif %}>{{label}}</option>
                                 {% endfor %}
@@ -32,7 +32,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="location" class="form-label">location:</label>
-                        <input type="text" class="form-control" id="location" name="location" placeholder="location of the incident" value="{{incident.location}}">
+                        <input type="text" class="form-control" id="location" name="location" placeholder="location of the incident" required value="{{incident.location}}">
                     </div>
                     <div class="mb-3">
                         {% if incident.image %}
