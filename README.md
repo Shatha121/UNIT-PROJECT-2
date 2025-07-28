@@ -20,3 +20,4 @@ SafeNet is a web-based platform built with Django that enables users to report, 
 - Delete report 
 
 ## User stories , UML, WireFrame
+- (https://docs.google.com/document/d/1rrfk1uxwBREkmWOtxJ_G7ZtHHV_ea1lKDLt4WpRLxQg/edit?usp=sharing)
