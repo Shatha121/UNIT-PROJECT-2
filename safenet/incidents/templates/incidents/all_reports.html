@@ -5,10 +5,10 @@
         <div class="container py-2">
             <h1 class="mb-4 text-center">All Reports</h1>
                 <div class="form-wrapper mb-5 shadow-sm rounded p-4">
-                    <form action="{% url 'incidents:all_reports_view' %}" method="GET" class="row g-3 align-items-end">
+                    <form action="{% url 'incidents:all_reports_view' %}" method="GET" class="row g-3 align-items-end" onsubmit="validateSearch()">
                         <div class="col-md-4">
                             <label for="search" class="form-label fw-bold">Search</label>
-                            <input type="search" class="form-control" value="{{request.GET.search}}" name="search" placeholder="Title or Category" />
+                            <input type="search" class="form-control" value="{{request.GET.search}}" id="searchInput" name="search" placeholder="Title or Category (3 or more characters)." />
                         </div>
                         <div class="col-md-2">
                             <label class="form-label fw-bold">Category</label>
@@ -87,5 +87,16 @@
                 <p class="bg-warning p-3 rounded mt-4 text-center">No results found for "{{request.GET.search}}"</p>
             {% endif %}
         </div>
+
+    <script>
+        function validateSearch(){
+        const searchInput = document.getElementById("searchInput").value.trim();
+        if (searchInput.length > 0 && searchInput.length < 3){
+            alert("Please enter at least 3 characters to search.");
+            return false;
+        }
+        return true;
+    }
+    </script>
 
 {% endblock %}
