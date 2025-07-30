@@ -4,6 +4,6 @@
         "builder": "NIXPACKS"
     },
     "deploy": {
-        "startCommand": "cd safenest && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn safenest.wsgi"
+        "startCommand": "cd safenet && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn safenest.wsgi"
     }
 }
