@@ -27,6 +27,7 @@ SECRET_KEY = 'django-insecure-a&#_e-@pm!u%hbu*f+mvie4joife!ri!2%#2e86uuou6d=#5xf
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = ["https://safenet-production.up.railway.app", "http://127.0.0.1"]
 
 
 # Application definition
