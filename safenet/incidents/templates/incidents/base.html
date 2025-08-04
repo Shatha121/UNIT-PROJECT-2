@@ -37,10 +37,10 @@
                 <a class="btn btn-outline-primary" href="{% url 'incidents:report_incident_view' %}">Report Incident</a>
                 {% endif %}
                 {% if not request.user.is_authenticated %}
-                    <a class="btn btn-outline-success" href="{% url 'accounts:sign_in' %}">Login</a>
+                    <a class="btn btn-outline-success" href="{% url 'accounts:sign_in' %}?next={{request.path}}">Login</a>
                 {% else %}
                     <span class="navbar-text me-2">{{request.user.username}}</span>
-                    <a class="btn btn-outline-danger" href="{% url 'accounts:logout' %}">Logout</a>
+                    <a class="btn btn-outline-danger" href="{% url 'accounts:logout' %}?next={{request.path}}">Logout</a>
                 {% endif %}
                 <a href="{% url 'main:light_mode_view' %}"><span class="material-symbols-outlined mode-toggle {% if request.COOKIES.mode != 'dark' %}active{% endif %}">light_mode</span></a>
                 <a href="{% url 'main:dark_mode_view' %}"><span class="material-symbols-outlined mode-toggle {% if request.COOKIES.mode == 'dark' %}active{% endif %}">dark_mode</span></a>

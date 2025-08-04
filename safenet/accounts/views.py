@@ -42,7 +42,7 @@ def sign_in(request:HttpResponse):
             if user.is_superuser:
                 return redirect("accounts:admin_dashboard")
             else:
-                return redirect("main:home_view")
+                return redirect(request.GET.get("next","/"))
         else:
             messages.error(request,"There is no user with these information", "alert-danger")
 
@@ -50,7 +50,7 @@ def sign_in(request:HttpResponse):
 
 def log_out(request:HttpRequest):
     logout(request)
-    return redirect("main:home_view")
+    return redirect(request.GET.get("next","/"))
 
 def admin_dashboard(request:HttpRequest):
     incidents = Incident.objects.all().order_by("-date_reported")

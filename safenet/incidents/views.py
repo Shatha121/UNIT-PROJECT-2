@@ -81,6 +81,6 @@ def delete_view(request:HttpRequest, incidents_id):
 def comment_views(request:HttpRequest, incidents_id:int):
     if request.method == "POST":
         incident = Incident.objects.get(pk=incidents_id)
-        comment = Comment(incident=incident,author=request.POST["author"],content=request.POST["content"])
+        comment = Comment(incident=incident, user=request.user,content=request.POST["content"])
         comment.save()
     return redirect("incidents:incidents_details_view", incidents_id=incidents_id)

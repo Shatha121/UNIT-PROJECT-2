@@ -52,7 +52,7 @@
       <div class="d-flex flex-column gap-3 mt-3">
         {% for comment in comments %}
         <div class="form-wrapper p-3 rounded shadow-sm">
-          <h5 class="mb-1">{{comment.author}}</h5>
+          <h5 class="mb-1">{{comment.user.username}}</h5>
           <p class="mb-2">{{comment.content}}</p>
           <small>{{comment.created_at}}</small>
         </div>
@@ -61,18 +61,15 @@
         {% endfor%}
       </div>
     </div>
-
+      {% if request.user.is_authenticated %}
       <hr class="my-5">
 
       <div class="mb-5">
+      
       <h3>Add Comment</h3>
       <div class="form-wrapper p-4 rounded shadow-sm mt-4">
         <form action="{% url 'incidents:comment_views' incident.id %}" method="POST">
           {% csrf_token %}
-                <div class="mb-3">
-                    <label for="author" class="form-label">Author: </label>
-                    <input type="text" class="form-control" id="author" name="author" placeholder="Your name">
-                </div>
                 <div class="mb-4">
                     <label for="content" class="form-label">Comment:</label>
                     <textarea placeholder="Write your comment here" name="content" class="form-control" id="content" rows="4"  required></textarea>
@@ -80,6 +77,11 @@
                 <div class="text-center">
                   <button type="submit" class="btn btn-primary px-4">Submit</button>
                 </div>
+        {% else %}
+          <div class="p-3 rounded bg-warning mt-4 d-flex flex-column gap-2">     
+            <h6>You need to login to add a comment!</h6>
+          </div>
+        {% endif %}
         </form>
       </div>
     </div>

@@ -15,7 +15,7 @@
     {% endif %}
 
     <h1 class="mb-4 contact-title text-center">Sign In</h1>
-    <form class="p-4 form-wrapper rounded shadow" action="{% url 'accounts:sign_in' %}" method="post" enctype="multipart/form-data">
+    <form class="p-4 form-wrapper rounded shadow" action="{% url 'accounts:sign_in' %}{% if 'next' in request.GET %}?next={{request.GET.next}}{% endif %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
             <label for="identifier" class="form-label">Username or Email</label>
