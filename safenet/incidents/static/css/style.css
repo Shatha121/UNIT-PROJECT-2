@@ -474,3 +474,24 @@ body.light-mode .navbar .toggle-icon {
 body.dark-mode .navbar .toggle-icon {
     color: white !important;
 }
+
+body.light-mode .btn-outline-success {
+    color: black;
+    border-color: black;
+}
+
+body.light-mode .btn-outline-success:hover {
+    background-color: #dee5ea;
+    color: black;
+    border-color: darkgrey;
+}
+
+body.dark-mode .btn-outline-success {
+    color: white;
+    border-color: lightgrey;
+}
+
+body.dark-mode .btn-outline-success:hover {
+    background-color: #b4b3b3;
+    color: black;
+}
