@@ -42,3 +42,7 @@ def sign_in(request:HttpResponse):
             messages.error(request,"There is no user with these information", "alert-danger")
 
     return render(request, "account/sign_in.html", {})
+
+def logout(request:HttpRequest):
+    logout(request)
+    return redirect("main:home_view")
