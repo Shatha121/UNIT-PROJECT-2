@@ -12,10 +12,6 @@
                 <form class="p-4 shadow rounded form-wrapper" action="{% url 'incidents:report_incident_view' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="location" class="form-label">Reporter Name:</label>
-                        <input type="text" class="form-control" id="reporter_name" name="reporter_name" placeholder="Username">
-                    </div>
-                    <div class="mb-3">
                         <label for="title" class="form-label">Title:</label>
                         <input type="text" class="form-control" id="title" name="title" placeholder="Title of the report" required>
                     </div>

@@ -19,8 +19,10 @@ def report_incident_view(request:HttpRequest):
         form = IncidentForm(request.POST, request.FILES)
         if form.is_valid():
             incident = form.save(commit=False)
-            reporter_name = request.POST.get("reporter_name")
-            incident.reporter_name = reporter_name if reporter_name.strip() else "Anonymous"
+            if request.user.is_authenticated:
+                incident.reporter_name = request.user.username
+            else:
+                incident.reporter_name = "Anonymous"
             incident.save()
             return redirect('main:home_view')
     
@@ -58,8 +60,6 @@ def all_reports_view(request:HttpRequest):
 def update_view(request:HttpRequest, incidents_id):
     incident = Incident.objects.get(pk=incidents_id)
     if request.method == "POST":
-        reporter_name = request.POST.get("reporter_name","").strip()
-        incident.reporter_name = reporter_name if reporter_name else "Anonymous"
         incident.title = request.POST["title"]
         incident.description = request.POST["description"]
         incident.category = request.POST["category"]

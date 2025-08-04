@@ -32,8 +32,10 @@
                                             </strong></p>
         <p>{{ incident.description }}</p>
         <div class="mt-4 d-flex gap-2">
+          {% if request.user.username == incident.reporter_name %}
           <a href="{% url 'incidents:update_view' incident.id %}" class="btn btn-outline-primary">update</a>
           <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">delete</button>
+          {% endif %}
         </div>
     </div>
     <div class="col-lg-5">

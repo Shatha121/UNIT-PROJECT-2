@@ -10,9 +10,14 @@
                 </video>
             </div>
             <div class="container hero-section hero-overlay d-flex flex-column justify-content-center align-items-center h-100">
-                <h1 class="hero-title">Welcome to SafeNet</h1>
+                <h1 class="hero-title pb-4">Welcome to SafeNet</h1>
                 <p class="hero-subtitle">We empower citizens to report issues and help build safer communities</p>
+                {% if request.user.is_authenticated and not request.user.is_staff %}
                 <a href="{% url 'incidents:report_incident_view' %}" class="btn btn-primary btn-lg hero-button">Report an Incident</a>
+                {% elif not request.user.is_authenticated and not request.user.is_staff %}
+                    <p class="hero-subtitle">login in to report an incident</p>
+                    <a href="{% url 'accounts:sign_in' %}" class="btn btn-primary btn-lg hero-button">Login</a>
+                {% endif %}
             </div>
         </div>
         <div class="row text-center mb-5 mt-3">
@@ -40,7 +45,7 @@
             <h5>The Most Reported Categories:</h5>
             <p class="text-muted">
                 {% for category in top_categories %}
-                    <span class="badge bg-secondary me-1">{{ category }}</span>
+                    <span class="badge bg-secondary p-3 me-1">{{ category }}</span>
                 {% endfor %}
             </p>
         </div>

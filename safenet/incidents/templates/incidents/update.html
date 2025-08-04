@@ -11,10 +11,6 @@
                 <form class="form" action="{% url 'incidents:update_view' incident.id %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="reporter_name" class="form-label">Reporter Name:</label>
-                        <input type="text" class="form-control" id="reporter_name" name="reporter_name" placeholder="Username" value="{{incident.reporter_name}}">
-                    </div>
-                    <div class="mb-3">
                         <label for="title" class="form-label">Title:</label>
                         <input type="text" class="form-control" id="title" name="title" required placeholder="Title of the report" value="{{incident.title}}">
                     </div>

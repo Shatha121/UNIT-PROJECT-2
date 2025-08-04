@@ -3,9 +3,19 @@
 {% block title %}Sign In{% endblock %}
 
 {% block content %}
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{message}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <h1 class="mb-4 contact-title text-center">Sign In</h1>
-    <form class="p-4 form-wrapper rounded shadow" action="{% url 'main:sign_in' %}" method="post" enctype="multipart/form-data">
+    <form class="p-4 form-wrapper rounded shadow" action="{% url 'accounts:sign_in' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
             <label for="identifier" class="form-label">Username or Email</label>
@@ -19,6 +29,12 @@
             <button type="submit" class="btn btn-primary btn-lg d-block mx-auto" data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>
         </div>
     </form>
+    <div class="text-center mt-3">
+        <small class="text-muted">
+            Don't have an account ? 
+            <a href="{% url 'accounts:sign_up' %}" class="text-decoration-none">Sign up</a>
+        </small>
+    </div>
 
 </div>
 

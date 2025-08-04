@@ -5,7 +5,7 @@ from .models import Comment
 class IncidentForm(forms.ModelForm):
     class Meta:
         model = Incident
-        fields = ['title', 'description', 'category', 'location', 'image', 'reporter_name']
+        fields = ['title', 'description', 'category', 'location', 'image']
 
 
 

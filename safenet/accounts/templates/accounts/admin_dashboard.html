@@ -1,10 +1,135 @@
-{% extends 'incidents/base.html' %}
+{% extends 'accounts/admin_base.html' %}
 {% load static %}
-{% block title %}Admin Dashboard{% endblock %}
-
+{% block title %}Home{% endblock %}
 {% block content %}
-    <div class="container">
-        <h1>Admin Dashboard</h1>
-        <p>Welcome,</p>
+    <div class="container py-5">
+        <h1 class="contact-title mb-4 text-center">Welcome back {{request.user.username}}</h1>
+        <div class="row text-center mb-5">
+            <div class="col-md-4">
+                <div class="card rounded p-4 shadow-sm">
+                    <h5>Total Reports</h5>
+                    <p class="fs-4">{{total_incidents}}</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card rounded p-4 shadow-sm ">
+                    <h5>Open</h5>
+                    <p class="fs-4 text-warning">{{open_incidents}}</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card rounded p-4 shadow-sm">
+                    <h5>Closed</h5>
+                    <p class="fs-4 text-success">{{closed_incidents}}</p>
+                </div>
+            </div>
+            <div class="mb-5">
+                <h5 class="pt-5">Top Categories</h5>
+                {% for category in top_categories %}
+                    <span class="badge bg-dark text-light fs-6 py-2 px-3 me-2 mt-4" style="border-radius: 12px;">{{category}}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <h3 class="mb-4 text-center">All Reports</h3>
+        <div class=" border rounded p-4 mb-4 shadow-sm custom-filter-box">
+            <form method="get" class="row gy-3 align-items-end mb-4 text-center">
+                            <div class="col-md-4">
+                                <label for="search" class="form-label fw-bold">Search</label>
+                                <input type="search" class="form-control" value="{{request.GET.search}}" id="searchInput" name="search" placeholder="Title or Category (3 or more characters)." />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold">Category</label>
+                                <select class="form-select" name="category">
+                                                <option value="">All Category</option>
+                                                {% for value, label in category_choices%}
+                                                    <option value="{{value}}" {% if request.GET.category == value %}selected{% endif %}>{{label}}</option>
+                                                {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                    <label class="form-label fw-bold">Status</label>
+                                    <select name="status" class="form-select">
+                                        <option value="">All Statuses</option>
+                                        {% for value, label in status_choices%}
+                                            <option value="{{value}}" {% if request.GET.status == value %} selected {% endif %}>{{label}}</option>
+                                        {% endfor %}
+                                    </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold">Rank</label>
+                                <select name="reporter_rank" class="form-select">
+                                    <option value="">All Ranks</option>
+                                    {% for rank in ranks %}
+                                        <option value="{{rank}}" {% if request.GET.reporter_rank == rank %} selected {% endif %}>{{rank}}</option>
+                                    {% endfor %}
+                                        <option value="None" {% if request.GET.reporter_rank == "None" %} selected {% endif %}>No Rank</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 d-grid">
+                                    <input type="submit" value="apply" class="btn btn-primary"/>
+                            </div>
+
+                        </form>
+                </div>
+        <div class="table-responsive">
+            <table class="table align-middle admin-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Reporter</th>
+                        <th>Status</th>
+                        <th>Change Status</th>
+                        <th>View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in recent_incidents %}
+                     <tr>
+                        <td data-label="Title">{{report.title}}</td>
+                        <td data-label="Category">{{report.category}}</td>
+                        <td data-label="Reporter">
+                            {{report.reporter_name}}
+                            {% if report.reporter_rank %}
+                                {% if report.reporter_rank == "Gold" %}
+                                    <span class="badge bg-warning text-dark" title="10+ reports">
+                                    <img src="{% static 'images/gold-medal.png' %}" width="20" class="me-1"><strong>Gold</strong>
+                                    </span>
+                                {% elif report.reporter_rank == "Silver" %}
+                                    <span class="badge bg-secondary" title="5+ reports">
+                                    <img src="{% static 'images/silver-medal.png' %}" width="20" class="me-1"><strong>Silver</strong>
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-bronze" style="background-color: rgb(187, 133, 34);" title="1-4 reports">
+                                    <img src="{% static 'images/bronze-medal.png' %}" width="20" class="me-1"><strong>Bronze</strong>
+                                    </span>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        <td data-label="Status">
+                            {% if report.status == 'open' %}
+                                <span class="badge bg-warning text-dark">Open</span>
+                            {% else %}
+                                <span class="badge bg-success">Closed</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="Change Status">
+                            <form method="post" action="{% url 'accounts:change_status_view' report.id %}">
+                                {% csrf_token %}
+                                <select name="status" class="form-select form-select-sm d-inline-block w-auto me-1">
+                                    <option value="open" {% if report.status == "open" %}selected{% endif %}>Open</option>
+                                    <option value="closed" {% if report.status == "closed" %}selected{% endif %}>Closed</option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                            </form>
+                        </td>
+                        <td data-label="View">
+                            <a href="{% url 'incidents:incidents_details_view' report.id %}" class="btn btn-outline-secondary btn-sm">View</a>
+                        </td>
+                     </tr>
+                    {% endfor%}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}
