@@ -28,6 +28,7 @@ class Incident(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='open')
     reporter_name = models.CharField(max_length=100, default="Anonymous", blank=True)
     date_reported = models.DateTimeField(auto_now_add=True)
+    upvote = models.ManyToManyField(User, related_name='upvoted_incidents', blank=True)
 
     def reporter_rank(self):
         if self.reporter_name.lower().strip() == "anonymous":

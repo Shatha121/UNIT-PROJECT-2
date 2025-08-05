@@ -84,3 +84,18 @@ def comment_views(request:HttpRequest, incidents_id:int):
         comment = Comment(incident=incident, user=request.user,content=request.POST["content"])
         comment.save()
     return redirect("incidents:incidents_details_view", incidents_id=incidents_id)
+
+
+def upvote_incident_view(request:HttpRequest, incidents_id:int):
+    incident = Incident.objects.get(pk=incidents_id)
+
+    if request.user.is_staff or request.user.username == incident.reporter_name:
+        return redirect("incidents:incidents_details_view", incidents_id=incidents_id)
+    
+
+    if request.user in incident.upvotes.all():
+        incident.upvote.remove(request.user)
+    else:
+        incident.upvote.add(request.user)
+
+    return redirect("incidents:incidents_details_view", incidents_id=incidents_id)
