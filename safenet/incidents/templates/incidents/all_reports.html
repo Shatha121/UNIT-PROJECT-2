@@ -38,10 +38,17 @@
                                     <option value="None" {% if request.GET.reporter_rank == "None" %} selected {% endif %}>No Rank</option>
                             </select>
                          </div>
-                        <div class="col-md-2 d-grid">
-                                <input type="submit" value="apply" class="btn btn-primary"/>
+                        <div class="col-md-2">
+                            <label class="form-label fw-bold">Sort by</label>
+                            <select name="sort_by" class="form-select">
+                                <option value="">Default</option>
+                                <option value="upvote_desc" {% if request.GET.sort_by == 'upvote_desc' %}selected{% endif %}>Most upvoted</option>
+                                <option value="upvote_asc" {% if request.GET.sort_by == 'upvote_asc' %}selected{% endif %}>Least upvoted</option>
+                            </select>
                         </div>
-
+                        <div class="col-12 d-flex justify-content-center">
+                                <input type="submit" value="apply" class="btn btn-primary px-5"/>
+                        </div>
                     </form>
                 </div>
                 <hr class="my-4">
@@ -54,7 +61,14 @@
                                         <img src="{{incident.image.url}}" class="card-img-top rounded-top" style="height: 200px; object-fit: cover;" alt="incident image">
                                     {% endif %}
                                     <div class="card-body">
-                                        <h5 class="card-title text-primary">{{incident.title}}</h5> 
+                                        <h5 class="card-title text-primary d-flex align-items-center justify-content-between">
+                                            {{incident.title}}
+                                            <span class="d-inline-flex align-items-center ms-2 text-muted" title="upvote">
+                                                <span class="me-1">&#9650;</span>
+                                                <span>{{incident.upvote.count}}</span>
+                                            </span>
+                                        </h5> 
+
                                         <p class="card-text mb-1">Reported by: <strong>👤{{incident.reporter_name}}</strong></p>
                                         
                                             {% with incident.reporter_rank as rank %}

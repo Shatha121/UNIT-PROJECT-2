@@ -38,6 +38,7 @@ def all_reports_view(request:HttpRequest):
     category_filter = request.GET.get("category")
     status_filter = request.GET.get("status")
     rank_filter = request.GET.get("reporter_rank")
+    sort_by = request.GET.get("sort_by")
     
     if search_result and len(search_result) >= 3:
         incidents = incidents.filter(Q(title__icontains=search_result) | Q(category__icontains=search_result))
@@ -50,6 +51,13 @@ def all_reports_view(request:HttpRequest):
             incidents = [i for i in incidents if i.reporter_name.lower().strip() =="anonymous" or i.reporter_rank() is None] 
         else: 
             incidents =[ i for i in incidents if i.reporter_name.lower().strip() !="anonymous" and i.reporter_rank() == rank_filter]
+
+    if sort_by == "upvote_desc":
+        incidents = incidents.annotate(upvote_count=Count('upvote')).order_by('-upvote_count')
+    elif sort_by == "upvote_asc":
+        incidents = incidents.annotate(upvote_count=Count('upvote')).order_by('upvote_count')
+    else:
+        incidents = incidents.order_by("-date_reported")
 
     ranks = ["Gold", "Silver", "Bronze"]
     category_choices = Incident._meta.get_field('category').choices
@@ -93,7 +101,7 @@ def upvote_incident_view(request:HttpRequest, incidents_id:int):
         return redirect("incidents:incidents_details_view", incidents_id=incidents_id)
     
 
-    if request.user in incident.upvotes.all():
+    if request.user in incident.upvote.all():
         incident.upvote.remove(request.user)
     else:
         incident.upvote.add(request.user)

@@ -4,8 +4,19 @@
 {% block content %}
 <div class="container my-5">
     <div class="row g-5 align-items-center">
-      <div class="col-lg-7">  
-        <h2 class="mb-3">{{ incident.title }}</h2>
+      <div class="col-lg-7">
+        <div class="d-flex align-items-center mb-4">  
+          {% if request.user.is_authenticated and not request.user.is_staff and not request.user.username == incident.reporter_name %}
+            <form method="POST" action="{% url 'incidents:upvote_incident_view' incident.id %}" class="me-3">
+              {% csrf_token %}
+                  <button type="submit" class="btn p-0 border-0 bg-transparent d-flex flex-column align-items-center">              
+                    <span class="arrow {% if request.user in incident.upvote.all %}text-success{% else %}text-muted{% endif %}" style="font-size: 1.5rem;">&#9650;</span>
+                    <span class="vote-count {%if request.COOKIES.mode == 'dark' %}text-light{% else %}text-dark{% endif %} " style="font-size: 1rem;">{{incident.upvote.count}}</span>
+                  </button>
+                </form>
+          {% endif %}
+          <h2 class="mb-0">{{ incident.title }}</h2>
+        </div>
         <p><strong>Status:</strong> {{incident.status|capfirst}}</p>
         <p><strong>Category:</strong> {{incident.category|capfirst}}</p>
         <p><strong>Location:</strong> {{incident.location}}</p>

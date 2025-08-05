@@ -58,6 +58,7 @@ def admin_dashboard(request:HttpRequest):
     category_filter = request.GET.get("category")
     status_filter = request.GET.get("status")
     rank_filter = request.GET.get("reporter_rank")
+    sort_by = request.GET.get("sort_by")
     
     if search_result and len(search_result) >= 1:
         incidents = incidents.filter(Q(title__icontains=search_result) | Q(category__icontains=search_result))
@@ -70,6 +71,15 @@ def admin_dashboard(request:HttpRequest):
             incidents = [i for i in incidents if i.reporter_name.lower().strip() =="anonymous" or i.reporter_rank() is None] 
         else: 
             incidents =[ i for i in incidents if i.reporter_name.lower().strip() !="anonymous" and i.reporter_rank() == rank_filter]
+
+    if sort_by == "upvote_desc":
+        incidents = incidents.annotate(upvote_count=Count('upvote')).order_by('-upvote_count')
+    elif sort_by == "upvote_asc":
+        incidents = incidents.annotate(upvote_count=Count('upvote')).order_by('upvote_count')
+    else:
+        incidents = incidents.order_by("-date_reported")
+
+
     total_incidents = Incident.objects.count()
     open_incidents = Incident.objects.filter(status="open").count()
     closed_incidents = Incident.objects.filter(status="closed").count()

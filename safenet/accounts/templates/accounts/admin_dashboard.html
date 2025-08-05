@@ -65,8 +65,16 @@
                                         <option value="None" {% if request.GET.reporter_rank == "None" %} selected {% endif %}>No Rank</option>
                                 </select>
                             </div>
-                            <div class="col-md-2 d-grid">
-                                    <input type="submit" value="apply" class="btn btn-primary"/>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold">Sort by</label>
+                                <select name="sort_by" class="form-select">
+                                    <option value="">Default</option>
+                                    <option value="upvote_desc" {% if request.GET.sort_by == 'upvote_desc' %}selected{% endif %}>Most upvoted</option>
+                                    <option value="upvote_asc" {% if request.GET.sort_by == 'upvote_asc' %}selected{% endif %}>Least upvoted</option>
+                                </select>
+                            </div>
+                            <div class="col-12 d-flex justify-content-center">
+                                <input type="submit" value="apply" class="btn btn-primary px-5"/>
                             </div>
 
                         </form>
@@ -80,6 +88,7 @@
                         <th>Reporter</th>
                         <th>Status</th>
                         <th>Change Status</th>
+                        <th>Upvotes</th>
                         <th>View</th>
                     </tr>
                 </thead>
@@ -106,6 +115,7 @@
                                 {% endif %}
                             {% endif %}
                         </td>
+                        <td data-label="Upvotes">{{report.upvote.count}}</td>
                         <td data-label="Status">
                             {% if report.status == 'open' %}
                                 <span class="badge bg-warning text-dark">Open</span>
