@@ -24,7 +24,7 @@
                             <span class="navbar-text me-2">{{request.user.username}}</span>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-outline-danger" href="{% url 'accounts:logout' %}?next={{request.path}}">Logout</a>
+                            <a class="btn btn-outline-danger" href="{% url 'accounts:logout' %}">Logout</a>
                         </li>
                         <li class="nav-item">
                             <a href="{% url 'main:light_mode_view' %}"><span class="material-symbols-outlined mode-toggle {% if request.COOKIES.mode != 'dark' %}active{% endif %}">light_mode</span></a>

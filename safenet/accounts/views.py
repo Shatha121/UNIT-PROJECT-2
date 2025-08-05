@@ -50,7 +50,7 @@ def sign_in(request:HttpResponse):
 
 def log_out(request:HttpRequest):
     logout(request)
-    return redirect(request.GET.get("next","/"))
+    return redirect("main:home_view")
 
 def admin_dashboard(request:HttpRequest):
     incidents = Incident.objects.all().order_by("-date_reported")
